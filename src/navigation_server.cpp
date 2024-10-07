@@ -34,7 +34,7 @@ protected:
   double distance_tolerance = 0.1;          // Max distance considered correct: 10cm
   double max_linear_speed = 0.4;            // Max linear speed: 40cm/s
   double max_angular_speed = 0.3490658;     // Max angular speed: 20º/s
-  double linear_near_threshold = 0.8;       // Distances below are considered near
+  double linear_near_threshold = 1.2;       // Distances below are considered near
   double angular_near_threshold = 0.1745329;// Angles below are considered near
 
 public:
@@ -72,91 +72,108 @@ public:
         std::cout << "tf2 could not find the required frames.\n";
     }
 
-    // start executing the action
-    while(success == false)
+    // Go over all waypoints in order
+    int n_wps = goal->waypoints.size();
+    std::cout << "Received request to follow " << n_wps << " waypoints\n";
+    for (int i=0; i<n_wps; ++i)
     {
-      std::cout << "The goal is: ";
-      std::cout << goal->point.x << ", ";
-      std::cout << goal->point.y << "\n";
-
-      // Check current position of robot
-      robot_transform_msg = tf_buffer.lookupTransform("demo", "diff_drive", ros::Time(0));
-      tf2::Transform robot_transform;
-      tf2::fromMsg(robot_transform_msg.transform, robot_transform);
-      std::cout << "The robot position is: ";
-      std::cout << robot_transform_msg.transform.translation.x << ", ";
-      std::cout << robot_transform_msg.transform.translation.y << "\n";
-
-      // Work in local coordinates
-      tf2::Vector3 point_global(goal->point.x, goal->point.y, goal->point.z);
-      tf2::Vector3 point_local = robot_transform.inverse()(point_global);
-        // Calculate distance to goal
-      feedback_.distance_remaining = sqrt(pow(point_local.getX(), 2) + pow(point_local.getY(), 2));
-        // Calculate angle to goal
-      double rotation_angle = atan2(point_local.getY(), point_local.getX());
-      rotation_angle = remainder(rotation_angle, 2*M_PI);
-      feedback_.angle_remaining = rotation_angle;
-      std::cout << "Robot needs to rotate " << rotation_angle*180./M_PI << "º\n";
-        // Calculate the distance along X (local)
-      double x_distance = point_local.getX();
-      std::cout << "Robot needs to continue " << x_distance << "m\n";
-
-      // Calculate velocity command
-        // Linear velocity
-      bool linear_success = false;
-      if (abs(x_distance) > distance_tolerance)
+      success = false;
+      // start executing the action
+      while(success == false)
       {
-        if (abs(x_distance) > linear_near_threshold)
-          command.linear.x = copysign(max_linear_speed, x_distance);
+        std::cout << "The goal is: ";
+        std::cout << goal->waypoints[i].x << ", ";
+        std::cout << goal->waypoints[i].y << "\n";
+
+        // Check current position of robot
+        robot_transform_msg = tf_buffer.lookupTransform("demo", "diff_drive", ros::Time(0));
+        tf2::Transform robot_transform;
+        tf2::fromMsg(robot_transform_msg.transform, robot_transform);
+        std::cout << "The robot position is: ";
+        std::cout << robot_transform_msg.transform.translation.x << ", ";
+        std::cout << robot_transform_msg.transform.translation.y << "\n";
+
+        // Work in local coordinates
+        tf2::Vector3 point_global(goal->waypoints[i].x, goal->waypoints[i].y, goal->waypoints[i].z);
+        tf2::Vector3 point_local = robot_transform.inverse()(point_global);
+          // Calculate distance to goal
+        double distance = sqrt(pow(point_local.getX(), 2) + pow(point_local.getY(), 2));
+          // Calculate angle to goal
+        double rotation_angle = atan2(point_local.getY(), point_local.getX());
+        rotation_angle = remainder(rotation_angle, 2*M_PI);
+        std::cout << "Robot needs to rotate " << rotation_angle*180./M_PI << "º\n";
+          // Calculate the distance along X (local)
+        double x_distance = point_local.getX();
+        std::cout << "Robot needs to continue " << x_distance << "m\n";
+
+        // Calculate velocity command
+          // Linear velocity
+        bool linear_success = false;
+        if (abs(x_distance) > distance_tolerance)
+        {
+          if (abs(x_distance) > linear_near_threshold)
+            command.linear.x = copysign(max_linear_speed, x_distance);
+          else
+            command.linear.x = copysign(max_linear_speed * abs(x_distance)/linear_near_threshold, x_distance);        // Linear
+            //command.linear.x = copysign(max_linear_speed * sqrt(abs(x_distance)/linear_near_threshold), x_distance);  // Sqrt
+        }
         else
-          command.linear.x = copysign(max_linear_speed * abs(x_distance)/linear_near_threshold, x_distance);
-      }
-      else
-      {
-        linear_success = true;
-        command.linear.x = 0.;
-      }
+        {
+          linear_success = true;
+          command.linear.x = 0.;
+        }
 
-        // Rotation
-      bool rotation_success = false;
-      if (abs(rotation_angle) > angle_tolerance)
-      {
-        if (abs(rotation_angle) > angular_near_threshold)
-          command.angular.z = copysign(max_angular_speed, rotation_angle);
+          // Rotation
+        bool rotation_success = false;
+        if (abs(rotation_angle) > angle_tolerance)
+        {
+          if (abs(rotation_angle) > angular_near_threshold)
+            command.angular.z = copysign(max_angular_speed, rotation_angle);
+          else
+            command.angular.z = copysign(max_angular_speed * abs(rotation_angle)/angular_near_threshold, rotation_angle);
+        }
         else
-          command.angular.z = copysign(max_angular_speed * abs(rotation_angle)/angular_near_threshold, rotation_angle);
+        {
+          rotation_success = true;
+          command.angular.z = 0.;
+        }
+
+        // Check if success
+        //success = linear_success && rotation_success;   // rotation_success doesnt make much sense when close to target
+        success = distance < distance_tolerance;
+
+        // Publish velocity command
+        command_pub.publish(command);
+        std::cout << "Velocity command:\n";
+        std::cout << "vx: " << command.linear.x << ", wz: " << command.angular.z << "\n";
+
+        // Fill feedback
+        feedback_.distance_remaining = distance;
+        feedback_.angle_remaining = rotation_angle;
+        feedback_.waypoints_remaining = n_wps - i;
+
+
+        // check that preempt has not been requested by the client
+        if (as_.isPreemptRequested() || !ros::ok())
+        {
+          ROS_INFO("%s: Preempted", action_name_.c_str());
+          // set the action state to preempted
+          as_.setPreempted();
+          success = false;
+          break;
+        }
+        // publish the feedback
+        as_.publishFeedback(feedback_);
+        // this sleep is not necessary, the sequence is computed at 1 Hz for demonstration purposes
+        r.sleep();
       }
-      else
-      {
-        rotation_success = true;
-        command.angular.z = 0.;
-      }
-
-      // Check if success
-      success = linear_success && rotation_success;
-
-      // Publish velocity command
-      command_pub.publish(command);
-      std::cout << "Velocity command:\n";
-      std::cout << "vx: " << command.linear.x << ", wz: " << command.angular.z << "\n";
-
-
-
-      // check that preempt has not been requested by the client
-      if (as_.isPreemptRequested() || !ros::ok())
-      {
-        ROS_INFO("%s: Preempted", action_name_.c_str());
-        // set the action state to preempted
-        as_.setPreempted();
-        success = false;
-        break;
-      }
-      // publish the feedback
-      as_.publishFeedback(feedback_);
-      // this sleep is not necessary, the sequence is computed at 1 Hz for demonstration purposes
-      r.sleep();
     }
 
+    // Clear the velocity command
+    setCommandToZero();
+    command_pub.publish(command);
+
+    // Send result message
     if(success)
     {
       result_.message = "Success";

@@ -1,5 +1,5 @@
 # Goal: XY coordinates
-geometry_msgs/Point point
+geometry_msgs/Point[] waypoints
 ---
 # Result: success or error string
 string message
@@ -7,3 +7,4 @@ string message
 # Feedback: remaining distance
 float64 distance_remaining
 float64 angle_remaining
+int32 waypoints_remaining
