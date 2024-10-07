@@ -1,0 +1,427 @@
+<?xml version='1.0'?>
+<sdf version='1.4'>
+    <model name='diff_drive'>
+        <pose>0 0 0.2 0 0 0</pose>
+
+        <!--Vehicle parts-->
+        <link name='chassis'>
+            <pose>0 0 0.175 0 -0 0</pose>
+            <inertial>
+                <mass>1.14395</mass>
+                <inertia>
+                <ixx>0.126164</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.416519</iyy>
+                <iyz>0</iyz>
+                <izz>0.481014</izz>
+                </inertia>
+            </inertial>
+            <visual name='visual'>
+                <geometry>
+                <box>
+                    <size>1 0.76 0.4</size>
+                </box>
+                </geometry>
+                <material>
+                <ambient>0.5 0.5 1.0 1</ambient>
+                <diffuse>0.5 0.5 1.0 1</diffuse>
+                <specular>0.0 0.0 1.0 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                <box>
+                    <size>1 0.76 0.4</size>
+                </box>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name='head'>
+            <pose>0.5 0 0.175 0 -1.5707 0</pose>
+            <inertial>
+                <mass>1.14395</mass>
+                <inertia>
+                <ixx>0.126164</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.416519</iyy>
+                <iyz>0</iyz>
+                <izz>0.481014</izz>
+                </inertia>
+            </inertial>
+            <visual name='visual'>
+                <geometry>
+                    <cylinder>
+                        <radius>0.15</radius>
+                        <length>0.04</length>
+                    </cylinder>
+                </geometry>
+                <material>
+                <ambient>1.0 0.25 0.25 1</ambient>
+                <diffuse>1.0 0.25 0.25 1</diffuse>
+                <specular>0.0 0.0 1.0 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                    <cylinder>
+                        <radius>0.15</radius>
+                        <length>0.04</length>
+                    </cylinder>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name='left_wheel'>
+            <pose>0 0.43 0 -1.5707 0 0</pose>
+            <inertial>
+                <mass>2</mass>
+                <inertia>
+                <ixx>0.145833</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.145833</iyy>
+                <iyz>0</iyz>
+                <izz>0.125</izz>
+                </inertia>
+            </inertial>
+            <visual name='visual'>
+                <geometry>
+                    <cylinder>
+                        <radius>0.2</radius>
+                        <length>0.1</length>
+                    </cylinder>
+                </geometry>
+                <material>
+                    <ambient>0.2 0.2 0.2 1</ambient>
+                    <diffuse>0.2 0.2 0.2 1</diffuse>
+                    <specular>0.2 0.2 0.2 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                    <cylinder>
+                        <radius>0.2</radius>
+                        <length>0.1</length>
+                    </cylinder>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name='right_wheel'>
+            <pose>0 -0.43 0 -1.5707 0 0</pose>
+            <inertial>
+                <mass>2</mass>
+                <inertia>
+                <ixx>0.145833</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.145833</iyy>
+                <iyz>0</iyz>
+                <izz>0.125</izz>
+                </inertia>
+            </inertial>
+            <visual name='visual'>
+                <geometry>
+                    <cylinder>
+                            <radius>0.2</radius>
+                            <length>0.1</length>
+                    </cylinder>
+                </geometry>
+                <material>
+                <ambient>0.2 0.2 0.2 1</ambient>
+                <diffuse>0.2 0.2 0.2 1</diffuse>
+                <specular>0.2 0.2 0.2 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                    <cylinder>
+                        <radius>0.2</radius>
+                        <length>0.1</length>
+                    </cylinder>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name='rear_caster'>
+            <pose>-0.4 -0 -0.1 0 -0 0</pose>
+            <inertial>
+                <mass>1</mass>
+                <inertia>
+                <ixx>0.1</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.1</iyy>
+                <iyz>0</iyz>
+                <izz>0.1</izz>
+                </inertia>
+            </inertial>
+            <visual name='visual'>
+                <geometry>
+                <sphere>
+                    <radius>0.1</radius>
+                </sphere>
+                </geometry>
+                <material>
+                <ambient>0.2 0.2 0.2 1</ambient>
+                <diffuse>0.2 0.2 0.2 1</diffuse>
+                <specular>0.2 0.2 0.2 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                <sphere>
+                    <radius>0.1</radius>
+                </sphere>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name='front_caster'>
+            <pose>0.4 -0 -0.1 0 -0 0</pose>
+            <inertial>
+                <mass>1</mass>
+                <inertia>
+                <ixx>0.1</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.1</iyy>
+                <iyz>0</iyz>
+                <izz>0.1</izz>
+                </inertia>
+            </inertial>
+            <visual name='visual'>
+                <geometry>
+                <sphere>
+                    <radius>0.1</radius>
+                </sphere>
+                </geometry>
+                <material>
+                <ambient>0.2 0.2 0.2 1</ambient>
+                <diffuse>0.2 0.2 0.2 1</diffuse>
+                <specular>0.2 0.2 0.2 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                <sphere>
+                    <radius>0.1</radius>
+                </sphere>
+                </geometry>
+            </collision>
+        </link>
+
+        <!--Sensors-->
+        <link name='front_lidar_link'>
+            <pose>0.4 0 0.4 0 0 0</pose>
+            <inertial>
+                <mass>1.14395</mass>
+                <inertia>
+                <ixx>0.126164</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.416519</iyy>
+                <iyz>0</iyz>
+                <izz>0.481014</izz>
+                </inertia>
+            </inertial>
+            <visual name='visual'>
+                <geometry>
+                    <box>
+                        <size>0.05 0.05 0.05</size>
+                    </box>
+                </geometry>
+                <material>
+                <ambient>0 0 0 1</ambient>
+                <diffuse>0 0 0 1</diffuse>
+                <specular>0.0 0.0 1.0 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                    <box>
+                        <size>0.05 0.05 0.05</size>
+                    </box>
+                </geometry>
+            </collision>
+
+            <sensor name='front_lidar' type='gpu_lidar'>"
+                <pose relative_to='front_lidar_frame'>0 0 0 0 0 0</pose>
+                <topic>front_lidar</topic>
+                <update_rate>10</update_rate>
+                <ray>
+                    <scan>
+                        <horizontal>
+                            <samples>640</samples>
+                            <resolution>1</resolution>
+                            <min_angle>-1.5707</min_angle>
+                            <max_angle>1.5707</max_angle>
+                        </horizontal>
+                        <vertical>
+                            <samples>1</samples>
+                            <resolution>0.01</resolution>
+                            <min_angle>0</min_angle>
+                            <max_angle>0</max_angle>
+                        </vertical>
+                    </scan>
+                    <range>
+                        <min>0.08</min>
+                        <max>10.0</max>
+                        <resolution>0.01</resolution>
+                    </range>
+                </ray>
+                <always_on>true</always_on>
+                <visualize>true</visualize>
+            </sensor>
+        </link>
+
+        <link name='rear_lidar_link'>
+            <pose>-0.4 0 0.4 0 0 3.141592</pose>
+            <inertial>
+                <mass>1.14395</mass>
+                <inertia>
+                <ixx>0.126164</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.416519</iyy>
+                <iyz>0</iyz>
+                <izz>0.481014</izz>
+                </inertia>
+            </inertial>
+            <visual name='visual'>
+                <geometry>
+                    <box>
+                        <size>0.05 0.05 0.05</size>
+                    </box>
+                </geometry>
+                <material>
+                <ambient>0 0 0 1</ambient>
+                <diffuse>0 0 0 1</diffuse>
+                <specular>0.0 0.0 1.0 1</specular>
+                </material>
+            </visual>
+            <collision name='collision'>
+                <geometry>
+                    <box>
+                        <size>0.05 0.05 0.05</size>
+                    </box>
+                </geometry>
+            </collision>
+
+            <sensor name='rear_lidar' type='gpu_lidar'>"
+                <pose relative_to='rear_lidar_frame'>0 0 0 0 0 0</pose>
+                <topic>rear_lidar</topic>
+                <update_rate>10</update_rate>
+                <ray>
+                    <scan>
+                        <horizontal>
+                            <samples>640</samples>
+                            <resolution>1</resolution>
+                            <min_angle>-1.5707</min_angle>
+                            <max_angle>1.5707</max_angle>
+                        </horizontal>
+                        <vertical>
+                            <samples>1</samples>
+                            <resolution>0.01</resolution>
+                            <min_angle>0</min_angle>
+                            <max_angle>0</max_angle>
+                        </vertical>
+                    </scan>
+                    <range>
+                        <min>0.08</min>
+                        <max>10.0</max>
+                        <resolution>0.01</resolution>
+                    </range>
+                </ray>
+                <always_on>true</always_on>
+                <visualize>true</visualize>
+            </sensor>
+        </link>
+
+        <!--Vehicle joints-->
+        <joint name='head_joint' type='fixed'>
+            <parent>chassis</parent>
+            <child>head</child>
+        </joint>
+
+        <joint name='left_wheel_joint' type='revolute'>
+            <parent>chassis</parent>
+            <child>left_wheel</child>
+            <axis>
+                <xyz>0 1 0</xyz>
+                <limit>
+                <lower>-1.79769e+308</lower>
+                <upper>1.79769e+308</upper>
+                </limit>
+            </axis>
+        </joint>
+
+        <joint name='right_wheel_joint' type='revolute'>
+            <parent>chassis</parent>
+            <child>right_wheel</child>
+            <axis>
+                <xyz>0 1 0</xyz>
+                <limit>
+                <lower>-1.79769e+308</lower>
+                <upper>1.79769e+308</upper>
+                </limit>
+            </axis>
+        </joint>
+
+        <joint name='rear_caster_joint' type='ball'>
+            <parent>chassis</parent>
+            <child>rear_caster</child>
+        </joint>
+
+        <joint name='front_caster_joint' type='ball'>
+            <parent>chassis</parent>
+            <child>front_caster</child>
+        </joint>
+
+        <joint name='front_lidar_joint' type='fixed'>
+            <parent>chassis</parent>
+            <child>front_lidar_link</child>
+        </joint>
+
+        <joint name='rear_lidar_joint' type='fixed'>
+            <parent>chassis</parent>
+            <child>rear_lidar_link</child>
+        </joint>
+
+
+        <!--Plugins-->
+        <plugin
+            filename="libignition-gazebo-diff-drive-system.so"
+            name="ignition::gazebo::systems::DiffDrive">
+            <left_joint>left_wheel_joint</left_joint>
+            <right_joint>right_wheel_joint</right_joint>
+            <wheel_separation>0.76</wheel_separation>
+            <wheel_radius>0.15</wheel_radius>
+            <odom_publish_frequency>10</odom_publish_frequency>
+            <topic>cmd_vel</topic>
+        </plugin>
+  
+        <plugin
+            filename="libignition-gazebo-sensors-system.so"
+            name="ignition::gazebo::systems::Sensors">
+            <render_engine>ogre2</render_engine>
+        </plugin>
+
+        <plugin
+            filename="libignition-gazebo-pose-publisher-system.so"
+            name="ignition::gazebo::systems::PosePublisher">
+            <publish_link_pose>true</publish_link_pose>
+            <publish_collision_pose>false</publish_collision_pose>
+            <publish_visual_pose>false</publish_visual_pose>
+            <publish_nested_model_pose>true</publish_nested_model_pose>     <!--Publishes map-to-model-->
+            <use_pose_vector_msg>true</use_pose_vector_msg>     <!--Necessary for bridge-->
+            <publish_sensor_pose>true</publish_sensor_pose>
+            <publish_model_pose>true</publish_model_pose>
+            <update_frequency>20</update_frequency>
+        </plugin>
+
+    </model>
+</sdf>
