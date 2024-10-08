@@ -2,6 +2,7 @@
 Simple navigation system for a simulated differential drive vehicle in Gazebo and ROS Noetic.
 
 # Installation
+*This repository was developed and tested in Ubuntu 20.04 Focal Fossa*
 * Install ROS Noetic
 * Install Gazebo Citadel
 * Clone this repository into a catkin workspace
