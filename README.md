@@ -14,9 +14,9 @@ Simple navigation system for a simulated differential drive vehicle in Gazebo an
 
       export IGN_GAZEBO_RESOURCE_PATH="/home/catkin_ws/src/diff_drive/models/world:/home/catkin_ws/src/diff_drive/models>
 
-  Then start the simulation (press the play button on the Gazebo gui):   
+  Then start the simulation:   
 
-      ign gazebo world_demo.sdf
+      ign gazebo -r world_demo.sdf
 
 * **Terminal 2**: source ROS and the catkin workspace:
 
@@ -27,7 +27,7 @@ Simple navigation system for a simulated differential drive vehicle in Gazebo an
 
       roslaunch diff_drive demo.launch
 
-* **Terminal 3**: configurate the navigation waypoints and send them using the navigation client. It can be used to send a single waypoint:   
+* **Terminal 3**: source ROS and the catkin workspace. Then configure the navigation waypoints and send them using the navigation client. It can be used to send a single waypoint:   
 
       rosrun diff_drive navigation_client 3.1 2.0
 
@@ -35,7 +35,7 @@ Simple navigation system for a simulated differential drive vehicle in Gazebo an
 
       rosrun diff_drive navigation_client /home/catkin_ws/src/diff_drive/config/waypoints.txt
 
-* **Terminal 4**: (optional) to see the progress of the navigation, subscribe to the `/Navigate/feedback` topic:
+* **Terminal 4**: (optional) source ROS and the catkin workspace. To see the progress of the navigation, subscribe to the `/Navigate/feedback` topic:
 
       rostopic echo /Navigate/feedback
 
@@ -50,7 +50,7 @@ Before trying these launch files, please export your models to the Gazebo resour
 
 * **Basic demo**: no obstacles, navigation client must be started in other terminal.
 
-        roslaunch diff_drive demo.launch
+        roslaunch diff_drive demo_empty.launch
 
     Try sending a simple goal (different terminal):
 

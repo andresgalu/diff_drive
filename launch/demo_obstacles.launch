@@ -30,9 +30,7 @@
     <!-- Obstacle avoider -->
     <node name="obstacle_avoider" pkg="diff_drive" type="obstacle_avoider" />
 
-    <!--node name="navigation_client" pkg="diff_drive" type="navigation_client"
-        args="5.0 2.0" output="screen" /-->
-
+    <!-- Rviz -->
     <node type="rviz" name="rviz" pkg="rviz" 
         args="-d $(find diff_drive)/rviz/diff_drive.rviz" />
 </launch>

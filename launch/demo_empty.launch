@@ -1,4 +1,9 @@
 <launch>
+    <!-- Gazebo world -->
+    <node name="gazebo_world" 
+        pkg="ros_ign_gazebo" type="ign_gazebo" 
+        args="-r world_demo.sdf" />
+
     <!-- Bridge -->
     <node 
         name="ros_ign_bridge" 
