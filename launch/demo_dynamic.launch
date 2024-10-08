@@ -2,7 +2,7 @@
     <!-- Gazebo world -->
     <node name="gazebo_world" 
         pkg="ros_ign_gazebo" type="ign_gazebo" 
-        args="-r world_demo.sdf" />
+        args="-r world_dynamic.sdf" />
 
     <!-- Bridge -->
     <node 
@@ -18,6 +18,13 @@
         pkg="diff_drive" type="navigation_server"
         output="screen" >
         <remap from="/cmd_vel" to="/cmd_vel_orig" />  <!-- This line allows the avoider to take control -->
+    </node>
+
+    <!-- Navigation client -->
+    <node name="navigation_client" 
+        pkg="diff_drive" type="navigation_client"
+        args="$(find diff_drive)/config/waypoints_dynamic.txt"
+        output="screen" >
     </node>
 
     <!-- Obstacle avoider -->

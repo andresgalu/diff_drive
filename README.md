@@ -8,6 +8,8 @@ Simple navigation system for a simulated differential drive vehicle in Gazebo an
 * Build it using `catkin_make` from the workspace folder
 
 # Execution
+*Note: for all-in-one demos, go to next section*
+
 * **Terminal 1**: export the Gazebo models to the Gazebo resource path. Adjust to your installation:
 
       export IGN_GAZEBO_RESOURCE_PATH="/home/catkin_ws/src/diff_drive/models/world:/home/catkin_ws/src/diff_drive/models>
@@ -36,3 +38,24 @@ Simple navigation system for a simulated differential drive vehicle in Gazebo an
 * **Terminal 4**: (optional) to see the progress of the navigation, subscribe to the `/Navigate/feedback` topic:
 
       rostopic echo /Navigate/feedback
+
+
+# Demos
+
+Before trying these launch files, please export your models to the Gazebo resource path as seen in the previous section. Then, source ROS and the catkin workspace.
+
+        export IGN_GAZEBO_RESOURCE_PATH="/home/catkin_ws/src/diff_drive/models/world:/home/catkin_ws/src/diff_drive/models>
+        source /opt/ros/noetic/setup.bash
+        source /home/catkin_ws/devel/setup.bash
+
+* **Basic demo**: no obstacles, basic navigation with 4 waypoints.
+
+        roslaunch diff_drive demo.launch
+
+* **Fixed obstacles demo**: fixed obstacles, waypoint navigation through them.
+
+        roslaunch diff_drive demo_obstacles.launch
+
+* **Dynamic obstacles demo**: moving obstacle, waypoint navigation inside dynamic area.
+
+        roslaunch diff_drive demo_dynamic.launch
