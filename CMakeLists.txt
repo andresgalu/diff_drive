@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  sensor_msgs
   geometry_msgs
   tf2
   tf2_ros
@@ -97,7 +98,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES diff_drive
-  CATKIN_DEPENDS roscpp rospy std_msgs actionlib_msgs geometry_msgs
+  CATKIN_DEPENDS roscpp rospy std_msgs actionlib_msgs geometry_msgs sensor_msgs
 #  DEPENDS system_lib
 )
 
@@ -125,6 +126,7 @@ include_directories(
 ## Declare a C++ executable
 add_executable(navigation_server src/navigation_server.cpp)
 add_executable(navigation_client src/navigation_client.cpp)
+add_executable(obstacle_avoider src/obstacle_avoidance.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -142,6 +144,12 @@ add_dependencies(
   navigation_client
   ${diff_drive_EXPORTED_TARGETS}
 )
+
+add_dependencies(
+  obstacle_avoider
+  ${diff_drive_EXPORTED_TARGETS}
+)
+
 ## Specify libraries to link a library or executable target against
 target_link_libraries(
   navigation_server
@@ -150,6 +158,11 @@ target_link_libraries(
 
 target_link_libraries(
   navigation_client
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(
+  obstacle_avoider
   ${catkin_LIBRARIES}
 )
 

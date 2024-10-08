@@ -21,7 +21,7 @@ Simple navigation system for a simulated differential drive vehicle in Gazebo an
       source /opt/ros/noetic/setup.bash
       source /home/catkin_ws/devel/setup.bash
 
-  Then launch the navigation server, Rviz, and ROS-Gazebo bridge:  
+  Then launch the navigation server, obstacle avoider, Rviz, and ROS-Gazebo bridge:  
 
       roslaunch diff_drive demo.launch
 

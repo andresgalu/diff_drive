@@ -74,14 +74,14 @@ public:
 
     // Go over all waypoints in order
     int n_wps = goal->waypoints.size();
-    std::cout << "Received request to follow " << n_wps << " waypoints\n";
+    std::cout << "\nReceived request to follow " << n_wps << " waypoints\n";
     for (int i=0; i<n_wps; ++i)
     {
       success = false;
       // start executing the action
       while(success == false)
       {
-        std::cout << "The goal is: ";
+        std::cout << "\nThe goal is: ";
         std::cout << goal->waypoints[i].x << ", ";
         std::cout << goal->waypoints[i].y << "\n";
 

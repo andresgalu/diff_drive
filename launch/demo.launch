@@ -7,8 +7,13 @@
         <remap from="/model/diff_drive/pose" to="/tf" />
     </node>
 
-    <node name="navigation_server" pkg="diff_drive" type="navigation_server"
-        output="screen" />
+    <node name="navigation_server" 
+        pkg="diff_drive" type="navigation_server"
+        output="screen" >
+        <remap from="/cmd_vel" to="/cmd_vel_orig" />  <!-- This line allows the avoider to take control -->
+    </node>
+
+    <node name="obstacle_avoider" pkg="diff_drive" type="obstacle_avoider" />
 
     <!--node name="navigation_client" pkg="diff_drive" type="navigation_client"
         args="5.0 2.0" output="screen" /-->
