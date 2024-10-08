@@ -61,6 +61,9 @@ public:
     ros::Rate r(10);
     bool success = false;
 
+    // Start measuring time
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
     // Check for the existence of frames
     for (int i=0; i<5; ++i)
     {
@@ -173,10 +176,15 @@ public:
     setCommandToZero();
     command_pub.publish(command);
 
+    // Stop measuring time
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    double time_elapsed = 1e-6 * std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+
     // Send result message
     if(success)
     {
       result_.message = "Success";
+      result_.time_elapsed = time_elapsed;
       ROS_INFO("%s: Succeeded", action_name_.c_str());
       // set the action state to succeeded
       as_.setSucceeded(result_);

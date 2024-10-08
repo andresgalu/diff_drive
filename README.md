@@ -48,9 +48,17 @@ Before trying these launch files, please export your models to the Gazebo resour
         source /opt/ros/noetic/setup.bash
         source /home/catkin_ws/devel/setup.bash
 
-* **Basic demo**: no obstacles, basic navigation with 4 waypoints.
+* **Basic demo**: no obstacles, navigation client must be started in other terminal.
 
         roslaunch diff_drive demo.launch
+
+    Try sending a simple goal (different terminal):
+
+        rosrun diff_drive navigation_client 3.0 -2.0
+
+    Or a `.txt` file with a list of waypoints:
+
+        rosrun diff_drive navigation_client /home/catkin_ws/src/diff_drive/config/waypoints.txt
 
 * **Fixed obstacles demo**: fixed obstacles, waypoint navigation through them.
 

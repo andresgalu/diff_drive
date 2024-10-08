@@ -9,6 +9,29 @@
 
 using namespace std;
 
+// Called once when the goal becomes active
+void activeCb()
+{
+    cout << "\nThe goal became active.\n";
+}
+
+// Called every time feedback is received for the goal
+void feedbackCb(const diff_drive::NavigateFeedbackConstPtr& feedback)
+{
+    cout << "\nReceived feedback: \n";
+    cout << "Distance remaining: " << feedback->distance_remaining << " [m]\n";
+    cout << "Angle remaining: " << feedback->angle_remaining * 180./M_PI << " [º]\n";
+    cout << "Waypoints remaining: " << feedback->waypoints_remaining << "\n";
+}
+
+// Called once when the goal completes
+void doneCb(const actionlib::SimpleClientGoalState& state, const diff_drive::NavigateResultConstPtr& result)
+{
+    cout << "\nAction finished: " << state.toString().c_str() << "\n";
+    cout << "Result message: " << result->message << "\n";
+    cout << "Time elapsed: " << result->time_elapsed << " [s]\n";
+}
+
 int main (int argc, char **argv)
 {
   ros::init(argc, argv, "navigate_client_node");
@@ -74,15 +97,15 @@ int main (int argc, char **argv)
   actionlib::SimpleActionClient<diff_drive::NavigateAction> ac("Navigate", true);
 
   // wait for the action server to start
-  ROS_INFO("Waiting for action server to start.");
+  cout << "Waiting for action server to start.\n";
   ac.waitForServer();
 
 
   // send a goal to the action
-  ROS_INFO("Action server started, sending goal.");
+  cout << "Action server started, sending goal.\n";
   diff_drive::NavigateGoal goal;
   goal.waypoints = waypoints;
-  ac.sendGoal(goal);
+  ac.sendGoal(goal, &doneCb, &activeCb, &feedbackCb);
 
   //wait for the action to return
   bool finished_before_timeout = ac.waitForResult(ros::Duration(0));
@@ -90,11 +113,9 @@ int main (int argc, char **argv)
   if (finished_before_timeout)
   {
     actionlib::SimpleClientGoalState state = ac.getState();
-    ROS_INFO("Action finished: %s",state.toString().c_str());
   }
   else
   {
-    ROS_INFO("Action did not finish before the time out.");
     ac.cancelGoal();
   }
 
